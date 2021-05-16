@@ -1,12 +1,10 @@
-import React, { Suspense, useEffect, useState } from 'react';
-import { Canvas } from 'react-three-fiber';
-import Controls from './components/THREE/Controls';
-import Ground from './components/THREE/Ground';
-import Menu from './components/UI/Menu';
-import Model from './components/THREE/Model';
-import Loader from './components/UI/Loader';
-import Title from './components/UI/Title';
-import { StateProvider, useStore } from './utils/store';
+import React, { Suspense, useEffect, useState } from "react";
+import { Canvas } from "react-three-fiber";
+import Controls from "./components/THREE/Controls";
+import Ground from "./components/THREE/Ground";
+import Menu from "./components/UI/Menu";
+import Model from "./components/THREE/Model";
+import Loader from "./components/UI/Loader";
 import {
   ambientLightProps,
   cameraProps,
@@ -15,35 +13,33 @@ import {
   modelProps,
   pixelRatio,
   pointLightProps,
-} from './utils/constants';
+} from "./utils/constants";
 
-import * as data from '../assets/data.json';
+import * as data from "../assets/data.json";
+import styled from "styled-components";
+import { Textures } from "./shared/types";
 
 type ModelDataType = {
-  diffuseTexturePath: string[];
   modelPath: string;
-  normalTexturePath: string;
+  textures: Textures;
   title: string;
 };
 
 const App: () => JSX.Element | null = () => {
-  const {
-    state: { itemIdx, matIdx },
-  } = useStore();
   const [modelData, setModelData] = useState(({} as unknown) as ModelDataType);
 
   useEffect(() => {
     const handleSetModelData: () => void = () => {
-      setModelData(data[itemIdx]);
+      setModelData(data[0]);
     };
 
     handleSetModelData();
     return () => handleSetModelData();
-  }, [itemIdx]);
+  }, [0]);
 
   return Object.keys(modelData).length > 0 ? (
-    <>
-      <Title name={modelData.title} />
+    <Wrapper>
+      <Menu />
       <Canvas
         camera={{ fov: cameraProps.fov, position: cameraProps.position }}
         colorManagement
@@ -51,53 +47,44 @@ const App: () => JSX.Element | null = () => {
         shadowMap
         pixelRatio={window.devicePixelRatio || pixelRatio}
       >
-        <StateProvider>
-          <ambientLight intensity={ambientLightProps.intensity} />
-          <pointLight
-            position={pointLightProps.position}
+        <ambientLight intensity={ambientLightProps.intensity} />
+        <pointLight
+          position={pointLightProps.position}
+          castShadow
+          decay={pointLightProps.decay}
+          shadow-mapSize-height={pointLightProps.shadowMapSize}
+          shadow-mapSize-width={pointLightProps.shadowMapSize}
+        />
+        <Controls
+          maxPolarAngle={controlsProps.maxPolarAngle}
+          minPolarAngle={controlsProps.minPolarAngle}
+          target={controlsProps.target}
+          enableKeys
+        />
+        <Suspense fallback={<Loader />}>
+          <Model
+            data={{
+              modelPath: modelData.modelPath,
+              textures: modelData.textures,
+            }}
+            position={modelProps.position}
             castShadow
-            decay={pointLightProps.decay}
-            shadow-mapSize-height={pointLightProps.shadowMapSize}
-            shadow-mapSize-width={pointLightProps.shadowMapSize}
           />
-          <Controls
-            maxPolarAngle={controlsProps.maxPolarAngle}
-            minPolarAngle={controlsProps.minPolarAngle}
-            target={controlsProps.target}
-            enableKeys
-          />
-          <Suspense fallback={<Loader />}>
-            <Model
-              data={{
-                modelPath: modelData.modelPath,
-                diffTexturePath: modelData.diffuseTexturePath[matIdx],
-                normalTexturePath: modelData.normalTexturePath,
-              }}
-              position={modelProps.position}
-              castShadow
-            />
-          </Suspense>
-          <Ground
-            name='Ground'
-            receiveShadow
-            position={groundProps.posiiton}
-            rotation={groundProps.rotation}
-          />
-        </StateProvider>
+        </Suspense>
+        <Ground
+          name="Ground"
+          receiveShadow
+          position={groundProps.posiiton}
+          rotation={groundProps.rotation}
+        />
       </Canvas>
-      <Menu
-        data={[
-          { color: 'red', title: 'RED' },
-          {
-            color: 'green',
-            image: 'https://scitechdaily.com/images/Carina-Nebula-2-scaled.jpg',
-            title: 'GREEN',
-          },
-          { color: 'blue', title: 'BLUE' },
-        ]}
-      />
-    </>
+    </Wrapper>
   ) : null;
 };
 
 export default App;
+
+const Wrapper = styled.div`
+  display: flex;
+  height: 100%;
+`;

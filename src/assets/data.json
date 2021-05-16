@@ -1,12 +1,32 @@
 [
   {
-    "title": "Converse - Chuck Taylor All Star",
-    "modelPath": "./assets/models/Converse/Converse.fbx",
-    "diffuseTexturePath": [
-      "./assets/models/Converse/textures/Converse.jpg",
-      "./assets/models/Converse/textures/Converse_green.jpg",
-      "./assets/models/Converse/textures/Converse_blue.jpg"
-    ],
-    "normalTexturePath": "./assets/models/Converse/textures/Converse_normal.jpg"
+    "title": "Cybex_priam",
+    "modelPath": "./assets/models/Cybex_priam/Cybex_priam.fbx",
+    "textures": {
+      "wheel": {
+        "ao": "./assets/models/Cybex_priam/textures/koleso_AO.png",
+        "diffuse": ""
+      },
+      "construction": [{
+        "ao": "./assets/models/Cybex_priam/textures/kontrukcia_1_AO.png",
+        "diffuse": "./assets/models/Cybex_priam/textures/konstrukcia_copper_sprite.png"
+      }, {
+        "ao": "./assets/models/Cybex_priam/textures/kontrukcia_2_AO.png",
+        "diffuse": "./assets/models/Cybex_priam/textures/konstrukcia_chrome_sprite.png"
+      }],
+      "bag": {
+        "ao": "./assets/models/Cybex_priam/textures/taska_AO.png",
+        "diffuse": [
+          "./assets/models/Cybex_priam/textures/koza.jpg",
+          "./assets/models/Cybex_priam/textures/Latka.jpg",
+          "./assets/models/Cybex_priam/textures/Latka_black_sprite.png",
+          "./assets/models/Cybex_priam/textures/Latka_blue_sprite.png",
+          "./assets/models/Cybex_priam/textures/Latka_grey_sprite.png",
+          "./assets/models/Cybex_priam/textures/Latka_khaki_sprite.png",
+          "./assets/models/Cybex_priam/textures/Latka_red_sprite.png",
+          "./assets/models/Cybex_priam/textures/Latka_white2.png"
+        ]
+      }
+    }
   }
 ]

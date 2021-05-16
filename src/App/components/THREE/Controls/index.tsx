@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { extend, useThree, ReactThreeFiber } from 'react-three-fiber';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import React, { useEffect, useRef } from "react";
+import { extend, useThree, ReactThreeFiber, useFrame } from "react-three-fiber";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 declare global {
   namespace JSX {
@@ -19,12 +19,14 @@ const Controls: (props: any) => JSX.Element = (props) => {
   const { camera, gl, invalidate } = useThree();
   const ref = useRef<OrbitControls | undefined>(undefined);
 
-  useEffect(() => {
-    ref.current?.update();
-    ref.current?.addEventListener('change', invalidate);
+  useFrame(() => ref.current?.update());
 
-    () => ref.current?.removeEventListener('change', invalidate);
-  }, []);
+  /*useEffect(() => {
+    ref.current?.update();
+    ref.current?.addEventListener("change", invalidate);
+
+    () => ref.current?.removeEventListener("change", invalidate);
+  }, []);*/
 
   return <orbitControls ref={ref} args={[camera, gl.domElement]} {...props} />;
 };
